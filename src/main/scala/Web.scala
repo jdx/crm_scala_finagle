@@ -23,7 +23,7 @@ class Hello extends Service[HttpRequest, HttpResponse] {
   def apply(req: HttpRequest): Future[HttpResponse] = {
     val response = Response()
     response.setStatusCode(200)
-    response.setContentString("CRM Scala")
+    response.setContentString("42")
     Future(response)
   }
 }
