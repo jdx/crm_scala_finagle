@@ -3,6 +3,7 @@ import com.twitter.finagle.builder.ServerBuilder
 import com.twitter.finagle.http.{Http, Response}
 import com.twitter.finagle.Service
 import com.twitter.util.Future
+import com.mongodb.casbah.Imports._
 import java.net.InetSocketAddress
 import util.Properties
 
@@ -22,8 +23,14 @@ object Web {
 class Hello extends Service[HttpRequest, HttpResponse] {
   def apply(req: HttpRequest): Future[HttpResponse] = {
     val response = Response()
+    val mongoClient =  MongoClient()
+    val db = mongoClient("crm")
+    val collection = db("customers")
+    val customers = collection.find()
+    val customersList = customers.map { case(c) => ("foo") }
+    val customersJson = "[" + customers.mkString(",") + "]"
     response.setStatusCode(200)
-    response.setContentString("42")
+    response.setContentString(customersJson)
     Future(response)
   }
 }
